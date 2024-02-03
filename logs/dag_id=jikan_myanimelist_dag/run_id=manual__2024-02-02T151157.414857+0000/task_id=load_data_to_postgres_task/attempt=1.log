@@ -1,0 +1,138 @@
+[2024-02-02T15:14:14.994+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: jikan_myanimelist_dag.load_data_to_postgres_task manual__2024-02-02T15:11:57.414857+00:00 [queued]>
+[2024-02-02T15:14:15.002+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: jikan_myanimelist_dag.load_data_to_postgres_task manual__2024-02-02T15:11:57.414857+00:00 [queued]>
+[2024-02-02T15:14:15.002+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 2
+[2024-02-02T15:14:15.015+0000] {taskinstance.py:1382} INFO - Executing <Task(PythonOperator): load_data_to_postgres_task> on 2024-02-02 15:11:57.414857+00:00
+[2024-02-02T15:14:15.021+0000] {standard_task_runner.py:57} INFO - Started process 1183 to run task
+[2024-02-02T15:14:15.023+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'jikan_myanimelist_dag', 'load_data_to_postgres_task', 'manual__2024-02-02T15:11:57.414857+00:00', '--job-id', '8', '--raw', '--subdir', 'DAGS_FOLDER/final_project_dag.py', '--cfg-path', '/tmp/tmp7n0xl4q7']
+[2024-02-02T15:14:15.025+0000] {standard_task_runner.py:85} INFO - Job 8: Subtask load_data_to_postgres_task
+[2024-02-02T15:14:15.060+0000] {task_command.py:416} INFO - Running <TaskInstance: jikan_myanimelist_dag.load_data_to_postgres_task manual__2024-02-02T15:11:57.414857+00:00 [running]> on host 223988130ac4
+[2024-02-02T15:14:15.255+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='ahmad_belva' AIRFLOW_CTX_DAG_ID='jikan_myanimelist_dag' AIRFLOW_CTX_TASK_ID='load_data_to_postgres_task' AIRFLOW_CTX_EXECUTION_DATE='2024-02-02T15:11:57.414857+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-02-02T15:11:57.414857+00:00'
+[2024-02-02T15:14:15.312+0000] {base.py:73} INFO - Using connection ID 'personal_postgres_db' for task execution.
+[2024-02-02T15:14:32.094+0000] {taskinstance.py:1937} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1890, in _execute_context
+    self.dialect.do_executemany(
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/dialects/postgresql/psycopg2.py", line 982, in do_executemany
+    context._psycopg2_fetched_rows = xtras.execute_values(
+  File "/home/airflow/.local/lib/python3.8/site-packages/psycopg2/extras.py", line 1296, in execute_values
+    parts.append(cur.mogrify(template, args))
+psycopg2.ProgrammingError: can't adapt type 'numpy.ndarray'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 192, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 209, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/final_project_dag.py", line 83, in load_into_postgres
+    df.to_sql('public.jikan_anime_2020', hook.get_sqlalchemy_engine(), if_exists='replace', chunksize=1000)
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/core/generic.py", line 2878, in to_sql
+    return sql.to_sql(
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/io/sql.py", line 769, in to_sql
+    return pandas_sql.to_sql(
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/io/sql.py", line 1920, in to_sql
+    total_inserted = sql_engine.insert_records(
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/io/sql.py", line 1470, in insert_records
+    raise err
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/io/sql.py", line 1461, in insert_records
+    return table.insert(chunksize=chunksize, method=method)
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/io/sql.py", line 1023, in insert
+    num_inserted = exec_insert(conn, keys, chunk_iter)
+  File "/home/airflow/.local/lib/python3.8/site-packages/pandas/io/sql.py", line 929, in _execute_insert
+    result = conn.execute(self.table.insert(), data)
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1385, in execute
+    return meth(self, multiparams, params, _EMPTY_EXECUTION_OPTS)
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 334, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1577, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1953, in _execute_context
+    self._handle_dbapi_exception(
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2134, in _handle_dbapi_exception
+    util.raise_(
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 211, in raise_
+    raise exception
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1890, in _execute_context
+    self.dialect.do_executemany(
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/dialects/postgresql/psycopg2.py", line 982, in do_executemany
+    context._psycopg2_fetched_rows = xtras.execute_values(
+  File "/home/airflow/.local/lib/python3.8/site-packages/psycopg2/extras.py", line 1296, in execute_values
+    parts.append(cur.mogrify(template, args))
+sqlalchemy.exc.ProgrammingError: (psycopg2.ProgrammingError) can't adapt type 'numpy.ndarray'
+[SQL: INSERT INTO "public.jikan_anime_2020" (index, title, title_english, type, source, episodes, duration, score, members, season, year, studios, genres, genre_extracted, studio_extracted) VALUES (%(index)s, %(title)s, %(title_english)s, %(type)s, %(source)s, %(episodes)s, %(duration)s, %(score)s, %(members)s, %(season)s, %(year)s, %(studios)s, %(genres)s, %(genre_extracted)s, %(studio_extracted)s)]
+[parameters: ({'index': 1, 'title': 'Haikyuu!! To the Top', 'title_english': 'Haikyu!! To the Top', 'type': 'TV', 'source': 'Manga', 'episodes': 13.0, 'duration': '24 min per ep', 'score': 8.36, 'members': 918730.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 10, 'name': 'Production I.G', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/10/Production_IG'}],
+      dtype=object), 'genres': array([{'mal_id': 30, 'name': 'Sports', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/30/Sports'}],
+      dtype=object), 'genre_extracted': 'Sports', 'studio_extracted': 'Production I.G'}, {'index': 2, 'title': 'Jibaku Shounen Hanako-kun', 'title_english': 'Toilet-Bound Hanako-kun', 'type': 'TV', 'source': 'Manga', 'episodes': 12.0, 'duration': '24 min per ep', 'score': 7.84, 'members': 583879.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 456, 'name': 'Lerche', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/456/Lerche'}],
+      dtype=object), 'genres': array([{'mal_id': 37, 'name': 'Supernatural', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/37/Supernatural'}],
+      dtype=object), 'genre_extracted': 'Supernatural', 'studio_extracted': 'Lerche'}, {'index': 3, 'title': "Darwin's Game", 'title_english': "Darwin's Game", 'type': 'TV', 'source': 'Manga', 'episodes': 11.0, 'duration': '26 min per ep', 'score': 7.22, 'members': 549798.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 852, 'name': 'Nexus', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/852/Nexus'}],
+      dtype=object), 'genres': array([{'mal_id': 1, 'name': 'Action', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/1/Action'},
+       {'mal_id': 7, 'name': 'Mystery' ... (178 characters truncated) ... 4/Sci-Fi'},
+       {'mal_id': 41, 'name': 'Suspense', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/41/Suspense'}],
+      dtype=object), 'genre_extracted': 'Action, Mystery, Sci-Fi, Suspense', 'studio_extracted': 'Nexus'}, {'index': 4, 'title': 'Dorohedoro', 'title_english': None, 'type': 'TV', 'source': 'Manga', 'episodes': 12.0, 'duration': '23 min per ep', 'score': 8.05, 'members': 537211.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 569, 'name': 'MAPPA', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/569/MAPPA'}],
+      dtype=object), 'genres': array([{'mal_id': 1, 'name': 'Action', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/1/Action'},
+       {'mal_id': 4, 'name': 'Comedy', ... (174 characters truncated) ... e/10/Fantasy'},
+       {'mal_id': 14, 'name': 'Horror', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/14/Horror'}],
+      dtype=object), 'genre_extracted': 'Action, Comedy, Fantasy, Horror', 'studio_extracted': 'MAPPA'}, {'index': 5, 'title': 'Itai no wa Iya nanode Bougyoryoku ni Kyokufuri Shitai to Omoimasu.', 'title_english': "BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense.", 'type': 'TV', 'source': 'Light novel', 'episodes': 12.0, 'duration': '23 min per ep', 'score': 7.53, 'members': 525170.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 300, 'name': 'SILVER LINK.', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/300/SILVER_LINK'}],
+      dtype=object), 'genres': array([{'mal_id': 1, 'name': 'Action', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/1/Action'},
+       {'mal_id': 2, 'name': 'Adventur ... (178 characters truncated) ... e/4/Comedy'},
+       {'mal_id': 10, 'name': 'Fantasy', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/10/Fantasy'}],
+      dtype=object), 'genre_extracted': 'Action, Adventure, Comedy, Fantasy', 'studio_extracted': 'SILVER LINK.'}, {'index': 6, 'title': 'Ishuzoku Reviewers', 'title_english': 'Interspecies Reviewers', 'type': 'TV', 'source': 'Web manga', 'episodes': 12.0, 'duration': '23 min per ep', 'score': 7.42, 'members': 468127.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 911, 'name': 'Passione', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/911/Passione'}],
+      dtype=object), 'genres': array([{'mal_id': 4, 'name': 'Comedy', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/4/Comedy'},
+       {'mal_id': 10, 'name': 'Fantasy ... (64 characters truncated) ... 10/Fantasy'},
+       {'mal_id': 49, 'name': 'Erotica', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/49/Erotica'}],
+      dtype=object), 'genre_extracted': 'Comedy, Fantasy, Erotica', 'studio_extracted': 'Passione'}, {'index': 7, 'title': 'Kyokou Suiri', 'title_english': 'In/Spectre', 'type': 'TV', 'source': 'Manga', 'episodes': 12.0, 'duration': '24 min per ep', 'score': 6.92, 'members': 467691.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 112, 'name': "Brain's Base", 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/112/Brains_Base'}],
+      dtype=object), 'genres': array([{'mal_id': 7, 'name': 'Mystery', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/7/Mystery'},
+       {'mal_id': 22, 'name': 'Roman ... (76 characters truncated) ... '},
+       {'mal_id': 37, 'name': 'Supernatural', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/37/Supernatural'}],
+      dtype=object), 'genre_extracted': 'Mystery, Romance, Supernatural', 'studio_extracted': "Brain's Base"}, {'index': 8, 'title': 'Made in Abyss Movie 3: Fukaki Tamashii no Reimei', 'title_english': 'Made in Abyss: Dawn of the Deep Soul', 'type': 'Movie', 'source': 'Web manga', 'episodes': 1.0, 'duration': '1 hr 45 min', 'score': 8.62, 'members': 451980.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 290, 'name': 'Kinema Citrus', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/290/Kinema_Citrus'}],
+      dtype=object), 'genres': array([{'mal_id': 2, 'name': 'Adventure', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/2/Adventure'},
+       {'mal_id': 8, 'name': 'Dr ... (292 characters truncated) ... re/7/Mystery'},
+       {'mal_id': 24, 'name': 'Sci-Fi', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/24/Sci-Fi'}],
+      dtype=object), 'genre_extracted': 'Adventure, Drama, Fantasy, Mystery, Sci-Fi', 'studio_extracted': 'Kinema Citrus'}  ... displaying 10 of 1000 total bound parameter sets ...  {'index': 999, 'title': 'Mirror Tune', 'title_english': None, 'type': 'Music', 'source': 'Original', 'episodes': 1.0, 'duration': '4 min', 'score': 6.65, 'members': 715.0, 'season': 'spring', 'year': 2022.0, 'studios': array([], dtype=object), 'genres': array([], dtype=object), 'genre_extracted': '', 'studio_extracted': ''}, {'index': 1000, 'title': 'Duel Masters King Max', 'title_english': None, 'type': 'TV', 'source': 'Original', 'episodes': 17.0, 'duration': '24 min per ep', 'score': 6.88, 'members': 689.0, 'season': 'spring', 'year': 2022.0, 'studios': array([{'mal_id': 112, 'name': "Brain's Base", 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/112/Brains_Base'},
+       {'mal_id': 47 ... (37 characters truncated) ... l Entertainment', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/474/Shogakukan_Music___Digital_Entertainment'}],
+      dtype=object), 'genres': array([{'mal_id': 1, 'name': 'Action', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/1/Action'},
+       {'mal_id': 2, 'name': 'Adventur ... (178 characters truncated) ... e/4/Comedy'},
+       {'mal_id': 10, 'name': 'Fantasy', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/10/Fantasy'}],
+      dtype=object), 'genre_extracted': 'Action, Adventure, Comedy, Fantasy', 'studio_extracted': "Brain's Base, Shogakukan Music & Digital Entertainment"})]
+(Background on this error at: https://sqlalche.me/e/14/f405)
+[2024-02-02T15:14:32.110+0000] {taskinstance.py:1400} INFO - Marking task as UP_FOR_RETRY. dag_id=jikan_myanimelist_dag, task_id=load_data_to_postgres_task, execution_date=20240202T151157, start_date=20240202T151414, end_date=20240202T151432
+[2024-02-02T15:14:32.123+0000] {standard_task_runner.py:104} ERROR - Failed to execute job 8 for task load_data_to_postgres_task ((psycopg2.ProgrammingError) can't adapt type 'numpy.ndarray'
+[SQL: INSERT INTO "public.jikan_anime_2020" (index, title, title_english, type, source, episodes, duration, score, members, season, year, studios, genres, genre_extracted, studio_extracted) VALUES (%(index)s, %(title)s, %(title_english)s, %(type)s, %(source)s, %(episodes)s, %(duration)s, %(score)s, %(members)s, %(season)s, %(year)s, %(studios)s, %(genres)s, %(genre_extracted)s, %(studio_extracted)s)]
+[parameters: ({'index': 1, 'title': 'Haikyuu!! To the Top', 'title_english': 'Haikyu!! To the Top', 'type': 'TV', 'source': 'Manga', 'episodes': 13.0, 'duration': '24 min per ep', 'score': 8.36, 'members': 918730.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 10, 'name': 'Production I.G', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/10/Production_IG'}],
+      dtype=object), 'genres': array([{'mal_id': 30, 'name': 'Sports', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/30/Sports'}],
+      dtype=object), 'genre_extracted': 'Sports', 'studio_extracted': 'Production I.G'}, {'index': 2, 'title': 'Jibaku Shounen Hanako-kun', 'title_english': 'Toilet-Bound Hanako-kun', 'type': 'TV', 'source': 'Manga', 'episodes': 12.0, 'duration': '24 min per ep', 'score': 7.84, 'members': 583879.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 456, 'name': 'Lerche', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/456/Lerche'}],
+      dtype=object), 'genres': array([{'mal_id': 37, 'name': 'Supernatural', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/37/Supernatural'}],
+      dtype=object), 'genre_extracted': 'Supernatural', 'studio_extracted': 'Lerche'}, {'index': 3, 'title': "Darwin's Game", 'title_english': "Darwin's Game", 'type': 'TV', 'source': 'Manga', 'episodes': 11.0, 'duration': '26 min per ep', 'score': 7.22, 'members': 549798.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 852, 'name': 'Nexus', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/852/Nexus'}],
+      dtype=object), 'genres': array([{'mal_id': 1, 'name': 'Action', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/1/Action'},
+       {'mal_id': 7, 'name': 'Mystery' ... (178 characters truncated) ... 4/Sci-Fi'},
+       {'mal_id': 41, 'name': 'Suspense', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/41/Suspense'}],
+      dtype=object), 'genre_extracted': 'Action, Mystery, Sci-Fi, Suspense', 'studio_extracted': 'Nexus'}, {'index': 4, 'title': 'Dorohedoro', 'title_english': None, 'type': 'TV', 'source': 'Manga', 'episodes': 12.0, 'duration': '23 min per ep', 'score': 8.05, 'members': 537211.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 569, 'name': 'MAPPA', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/569/MAPPA'}],
+      dtype=object), 'genres': array([{'mal_id': 1, 'name': 'Action', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/1/Action'},
+       {'mal_id': 4, 'name': 'Comedy', ... (174 characters truncated) ... e/10/Fantasy'},
+       {'mal_id': 14, 'name': 'Horror', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/14/Horror'}],
+      dtype=object), 'genre_extracted': 'Action, Comedy, Fantasy, Horror', 'studio_extracted': 'MAPPA'}, {'index': 5, 'title': 'Itai no wa Iya nanode Bougyoryoku ni Kyokufuri Shitai to Omoimasu.', 'title_english': "BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense.", 'type': 'TV', 'source': 'Light novel', 'episodes': 12.0, 'duration': '23 min per ep', 'score': 7.53, 'members': 525170.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 300, 'name': 'SILVER LINK.', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/300/SILVER_LINK'}],
+      dtype=object), 'genres': array([{'mal_id': 1, 'name': 'Action', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/1/Action'},
+       {'mal_id': 2, 'name': 'Adventur ... (178 characters truncated) ... e/4/Comedy'},
+       {'mal_id': 10, 'name': 'Fantasy', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/10/Fantasy'}],
+      dtype=object), 'genre_extracted': 'Action, Adventure, Comedy, Fantasy', 'studio_extracted': 'SILVER LINK.'}, {'index': 6, 'title': 'Ishuzoku Reviewers', 'title_english': 'Interspecies Reviewers', 'type': 'TV', 'source': 'Web manga', 'episodes': 12.0, 'duration': '23 min per ep', 'score': 7.42, 'members': 468127.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 911, 'name': 'Passione', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/911/Passione'}],
+      dtype=object), 'genres': array([{'mal_id': 4, 'name': 'Comedy', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/4/Comedy'},
+       {'mal_id': 10, 'name': 'Fantasy ... (64 characters truncated) ... 10/Fantasy'},
+       {'mal_id': 49, 'name': 'Erotica', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/49/Erotica'}],
+      dtype=object), 'genre_extracted': 'Comedy, Fantasy, Erotica', 'studio_extracted': 'Passione'}, {'index': 7, 'title': 'Kyokou Suiri', 'title_english': 'In/Spectre', 'type': 'TV', 'source': 'Manga', 'episodes': 12.0, 'duration': '24 min per ep', 'score': 6.92, 'members': 467691.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 112, 'name': "Brain's Base", 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/112/Brains_Base'}],
+      dtype=object), 'genres': array([{'mal_id': 7, 'name': 'Mystery', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/7/Mystery'},
+       {'mal_id': 22, 'name': 'Roman ... (76 characters truncated) ... '},
+       {'mal_id': 37, 'name': 'Supernatural', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/37/Supernatural'}],
+      dtype=object), 'genre_extracted': 'Mystery, Romance, Supernatural', 'studio_extracted': "Brain's Base"}, {'index': 8, 'title': 'Made in Abyss Movie 3: Fukaki Tamashii no Reimei', 'title_english': 'Made in Abyss: Dawn of the Deep Soul', 'type': 'Movie', 'source': 'Web manga', 'episodes': 1.0, 'duration': '1 hr 45 min', 'score': 8.62, 'members': 451980.0, 'season': 'winter', 'year': 2020.0, 'studios': array([{'mal_id': 290, 'name': 'Kinema Citrus', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/290/Kinema_Citrus'}],
+      dtype=object), 'genres': array([{'mal_id': 2, 'name': 'Adventure', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/2/Adventure'},
+       {'mal_id': 8, 'name': 'Dr ... (292 characters truncated) ... re/7/Mystery'},
+       {'mal_id': 24, 'name': 'Sci-Fi', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/24/Sci-Fi'}],
+      dtype=object), 'genre_extracted': 'Adventure, Drama, Fantasy, Mystery, Sci-Fi', 'studio_extracted': 'Kinema Citrus'}  ... displaying 10 of 1000 total bound parameter sets ...  {'index': 999, 'title': 'Mirror Tune', 'title_english': None, 'type': 'Music', 'source': 'Original', 'episodes': 1.0, 'duration': '4 min', 'score': 6.65, 'members': 715.0, 'season': 'spring', 'year': 2022.0, 'studios': array([], dtype=object), 'genres': array([], dtype=object), 'genre_extracted': '', 'studio_extracted': ''}, {'index': 1000, 'title': 'Duel Masters King Max', 'title_english': None, 'type': 'TV', 'source': 'Original', 'episodes': 17.0, 'duration': '24 min per ep', 'score': 6.88, 'members': 689.0, 'season': 'spring', 'year': 2022.0, 'studios': array([{'mal_id': 112, 'name': "Brain's Base", 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/112/Brains_Base'},
+       {'mal_id': 47 ... (37 characters truncated) ... l Entertainment', 'type': 'anime', 'url': 'https://myanimelist.net/anime/producer/474/Shogakukan_Music___Digital_Entertainment'}],
+      dtype=object), 'genres': array([{'mal_id': 1, 'name': 'Action', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/1/Action'},
+       {'mal_id': 2, 'name': 'Adventur ... (178 characters truncated) ... e/4/Comedy'},
+       {'mal_id': 10, 'name': 'Fantasy', 'type': 'anime', 'url': 'https://myanimelist.net/anime/genre/10/Fantasy'}],
+      dtype=object), 'genre_extracted': 'Action, Adventure, Comedy, Fantasy', 'studio_extracted': "Brain's Base, Shogakukan Music & Digital Entertainment"})]
+(Background on this error at: https://sqlalche.me/e/14/f405); 1183)
+[2024-02-02T15:14:32.176+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 1
+[2024-02-02T15:14:32.202+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check
