@@ -1,4 +1,4 @@
-# ABOUT
+## About This Project
 
 This project aims to create a Data Pipeline using Anime Data from 2020 - 2023 using Jikan API: https://jikan.moe/
 
